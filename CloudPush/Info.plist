@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+   <key>UTExportedTypeDeclarations</key>
+    <array>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>com.example.p8</string>
+            <key>UTTypeDescription</key>
+            <string>P8 Private Key</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>p8</string>
+                </array>
+            </dict>
+        </dict>
+
+        <dict>
+        <key>UTTypeIdentifier</key>
+        <string>com.example.p12</string>
+        <key>UTTypeDescription</key>
+        <string>PKCS#12 Certificate</string>
+        <key>UTTypeConformsTo</key>
+        <array>
+            <string>public.data</string>
+        </array>
+        <key>UTTypeTagSpecification</key>
+        <dict>
+            <key>public.filename-extension</key>
+            <array>
+                <string>p12</string>
+            </array>
+        </dict>
+    </dict>
+    </array>
+</dict>
+</plist>
