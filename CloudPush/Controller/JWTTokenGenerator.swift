@@ -21,8 +21,8 @@ struct JWTTokenGenerator {
     }
     
     @discardableResult
-    func build() -> String? {
-        guard let privateKey = readFile() else { return nil }
+    func build() -> (token:String?, p8: Data?) {
+        guard let privateKey = readFile() else { return (nil, nil) }
         
         
         let header = Header(typ: nil, kid: keyID)
@@ -34,10 +34,10 @@ struct JWTTokenGenerator {
         do  {
             
             let signedJWT = try myJWT.sign(using: jwtSigner)
-            return signedJWT
+            return (signedJWT, privateKey)
         } catch {
             debugPrint(error.localizedDescription)
-            return nil
+            return (nil, privateKey)
         }
     }
     
@@ -64,7 +64,6 @@ struct JWTTokenGenerator {
         
         return nil
     }
-    
 }
 
 fileprivate struct APNSJWTClaims: Claims {
