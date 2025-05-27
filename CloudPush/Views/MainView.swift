@@ -48,7 +48,14 @@ struct MainView: View {
                 .padding()
                 
             case .fcm:
-                FCMView()
+                
+                Group {
+                    FCMView()
+                    Spacer()
+                }
+                .padding()
+                
+                
             }
         }
         .navigationTitle(selectedSideMenuItem.type.name())

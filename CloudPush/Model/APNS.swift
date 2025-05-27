@@ -150,7 +150,7 @@ struct APNSJSONPayload: Codable {
 
 let defaultAPNSJSONPayload = [
     "aps": [
-        "alert": "Hello World!",
+        "alert": "Hello, hey there!",
         "sound": "default"
     ]
 ]

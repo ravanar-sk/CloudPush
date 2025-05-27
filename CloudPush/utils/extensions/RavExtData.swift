@@ -24,9 +24,18 @@ extension Data {
         return String(describing: self)
     }
     
-    func toDictionary() -> [String: Any]? {
+//    func toDictionary() -> [String: Any]? {
+//        do {
+//            return try JSONSerialization.jsonObject(with: self, options: []) as? [String: Any]
+//        } catch {
+//            debugPrint(error.localizedDescription)
+//        }
+//        return nil
+//    }
+    
+    func toDictionary<K,V>() -> [K:V]? {
         do {
-            return try JSONSerialization.jsonObject(with: self, options: []) as? [String: Any]
+            return try JSONSerialization.jsonObject(with: self, options: []) as? [K:V]
         } catch {
             debugPrint(error.localizedDescription)
         }

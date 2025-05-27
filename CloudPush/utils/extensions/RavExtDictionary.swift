@@ -34,3 +34,21 @@ extension Dictionary {
         return nil
     }
 }
+
+/**
+ Function to convert a Dictionary to Data
+ */
+extension Dictionary {
+    
+    func toData() -> Data? {
+        
+        do {
+            let data = try JSONSerialization.data(withJSONObject: self, options: [.prettyPrinted])
+            return data
+        } catch {
+            debugPrint(error.localizedDescription)
+        }
+        
+        return nil
+    }
+}

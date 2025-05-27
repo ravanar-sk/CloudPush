@@ -89,7 +89,7 @@ extension APNSController {
                 if statusCode == 200 {
                     success()
                 } else {
-                    if let dictResponse = data?.toDictionary(), let reason = dictResponse["reason"] as? String {
+                    if let dictResponse: [String:Any] = data?.toDictionary(), let reason = dictResponse["reason"] as? String {
                         
                         if statusCode == 403 && reason == "ExpiredProviderToken" {
                             self.deletePreviousItem(keyID: keyID, teamID: teamID, p8Data: p8)
@@ -257,7 +257,7 @@ extension APNSController: URLSessionDelegate {
                 if statusCode == 200 {
                     success()
                 } else {
-                    if let dictResponse = data?.toDictionary(), let reason = dictResponse["reason"] as? String {
+                    if let dictResponse: [String:Any] = data?.toDictionary(), let reason = dictResponse["reason"] as? String {
                         failed(statusCode, reason)
                     } else {
                         debugPrint("Dictionary response conversion error")

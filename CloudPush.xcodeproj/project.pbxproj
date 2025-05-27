@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE1586B12DDC9B3000E4DC53 /* OAuth1 in Frameworks */ = {isa = PBXBuildFile; productRef = CE1586B02DDC9B3000E4DC53 /* OAuth1 */; };
+		CE1586B32DDC9B3000E4DC53 /* OAuth2 in Frameworks */ = {isa = PBXBuildFile; productRef = CE1586B22DDC9B3000E4DC53 /* OAuth2 */; };
+		CE1586B52DDC9B3000E4DC53 /* SwiftyBase64 in Frameworks */ = {isa = PBXBuildFile; productRef = CE1586B42DDC9B3000E4DC53 /* SwiftyBase64 */; };
+		CE1586B72DDC9B3000E4DC53 /* TinyHTTPServer in Frameworks */ = {isa = PBXBuildFile; productRef = CE1586B62DDC9B3000E4DC53 /* TinyHTTPServer */; };
 		CE35F9FD2DB11686004C2C7E /* SwiftJWT in Frameworks */ = {isa = PBXBuildFile; productRef = CE35F9FC2DB11686004C2C7E /* SwiftJWT */; };
 /* End PBXBuildFile section */
 
@@ -40,7 +44,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE1586B32DDC9B3000E4DC53 /* OAuth2 in Frameworks */,
+				CE1586B12DDC9B3000E4DC53 /* OAuth1 in Frameworks */,
 				CE35F9FD2DB11686004C2C7E /* SwiftJWT in Frameworks */,
+				CE1586B72DDC9B3000E4DC53 /* TinyHTTPServer in Frameworks */,
+				CE1586B52DDC9B3000E4DC53 /* SwiftyBase64 in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +92,10 @@
 			name = CloudPush;
 			packageProductDependencies = (
 				CE35F9FC2DB11686004C2C7E /* SwiftJWT */,
+				CE1586B02DDC9B3000E4DC53 /* OAuth1 */,
+				CE1586B22DDC9B3000E4DC53 /* OAuth2 */,
+				CE1586B42DDC9B3000E4DC53 /* SwiftyBase64 */,
+				CE1586B62DDC9B3000E4DC53 /* TinyHTTPServer */,
 			);
 			productName = CloudPush;
 			productReference = CE0CC5E12D9D6E97006A6323 /* CloudPush.app */;
@@ -115,6 +127,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				CE35F9FB2DB11686004C2C7E /* XCRemoteSwiftPackageReference "Swift-JWT" */,
+				CE1586AF2DDC9B3000E4DC53 /* XCRemoteSwiftPackageReference "google-auth-library-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CE0CC5E22D9D6E97006A6323 /* Products */;
@@ -351,6 +364,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		CE1586AF2DDC9B3000E4DC53 /* XCRemoteSwiftPackageReference "google-auth-library-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleapis/google-auth-library-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.3;
+			};
+		};
 		CE35F9FB2DB11686004C2C7E /* XCRemoteSwiftPackageReference "Swift-JWT" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/IBM-Swift/Swift-JWT";
@@ -362,6 +383,26 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		CE1586B02DDC9B3000E4DC53 /* OAuth1 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE1586AF2DDC9B3000E4DC53 /* XCRemoteSwiftPackageReference "google-auth-library-swift" */;
+			productName = OAuth1;
+		};
+		CE1586B22DDC9B3000E4DC53 /* OAuth2 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE1586AF2DDC9B3000E4DC53 /* XCRemoteSwiftPackageReference "google-auth-library-swift" */;
+			productName = OAuth2;
+		};
+		CE1586B42DDC9B3000E4DC53 /* SwiftyBase64 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE1586AF2DDC9B3000E4DC53 /* XCRemoteSwiftPackageReference "google-auth-library-swift" */;
+			productName = SwiftyBase64;
+		};
+		CE1586B62DDC9B3000E4DC53 /* TinyHTTPServer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE1586AF2DDC9B3000E4DC53 /* XCRemoteSwiftPackageReference "google-auth-library-swift" */;
+			productName = TinyHTTPServer;
+		};
 		CE35F9FC2DB11686004C2C7E /* SwiftJWT */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CE35F9FB2DB11686004C2C7E /* XCRemoteSwiftPackageReference "Swift-JWT" */;
