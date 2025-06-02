@@ -29,22 +29,24 @@ struct APNSView: View {
     @State private var arrayPriority: [APNSPriority] = apns[.iOS]![.alert]!.priority
     
     
-    @State private var p12Password: String = "12345678"
-    @State private var keyID: String = "DFZGZ7KY49"
-    @State private var errorKeyID: String = "Enter a valid Key ID"
-    @State private var teamID: String = "NHS5DQA5B5"
-    @State private var errorTeamID: String = "Enter a valid Team ID"
-    @State private var bundleID: String = "com.qatarrail.QRailCustomerApp"
-    @State private var errorBundleID: String = "Enter a valid bundle ID"
+    @State private var p12Password: String = ""
+    @State private var keyID: String = ""
+    @State private var errorKeyID: String = ""
+    @State private var teamID: String = ""
+    @State private var errorTeamID: String = ""
+    @State private var bundleID: String = ""
+    @State private var errorBundleID: String = ""
     @State private var deviceToken: String = ""
-    @State private var errorDeviceToken: String = "Enter a valid device token"
+    @State private var errorDeviceToken: String = ""
     @State private var isJSON: Bool = true
-    @State private var pushPayload: String = "Hello Dear"
-    @State private var pushPayloadPreview: String = "Hello Dada"
+    @State private var pushPayload: String = ""
+    @State private var errorPushPayload: String = ""
+    @State private var pushPayloadPreview: String = ""
     @State private var showFilePicker: Bool = false
     
     @State private var pickerFileType: UTType = .p8
     @State private var selectedFile: URL!
+    @State private var errorSelectedFile: String = ""
     
     @State private var p8Data: Data!
     
@@ -122,17 +124,23 @@ struct APNSView: View {
                 viewPriority
             }
             //            .padding(.top, 0)
-            
-            HStack(alignment: .top) {
-                viewFileType
-                viewSelectFile
-                
-                if (fileType == .p12) {
-                    viewP12Password
+            VStack {
+                HStack(alignment: .top) {
+                    viewFileType
+                    viewSelectFile
+                    
+                    if (fileType == .p12) {
+                        viewP12Password
+                    }
+                    
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 
+                Text(errorSelectedFile)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .font(.system(size: 12))
+                    .foregroundColor(.red)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
             //            .background(.cyan)
             //            .frame(maxWidth: .infinity, alignment: .top)
             //            .background(.red)
@@ -206,23 +214,23 @@ struct APNSView: View {
     }
     
     private var viewP12Password: some View {
-        RavTextField(title: "Password", text: $p12Password, error: "")
+        RavTextField(title: "Password (Optional)", text: $p12Password, error: "")
     }
     
     private var viewKeyID: some View {
-        RavTextField(title: "Key ID", text: $keyID, error: "")
+        RavTextField(title: "Key ID", text: $keyID, error: errorKeyID)
     }
     
     private var viewTeamID: some View {
-        RavTextField(title: "Team ID", text: $teamID, error: "")
+        RavTextField(title: "Team ID", text: $teamID, error: errorTeamID)
     }
     
     private var viewBundleID: some View {
-        RavTextField(title: "Bundle ID", text: $bundleID, error: "")
+        RavTextField(title: "Bundle ID", text: $bundleID, error: errorBundleID)
     }
     
     private var viewDeviceToken: some View {
-        RavTextField(title: "Device Token", text: $deviceToken, error: "")
+        RavTextField(title: "Device Token", text: $deviceToken, error: errorDeviceToken)
     }
     
     private var viewIsJSON: some View {
@@ -237,12 +245,16 @@ struct APNSView: View {
     }
     var viewPayload: some View {
         // Row 8
-        HStack {
-            TextEditor(text: $pushPayload)
+        VStack {
+//            TextEditor(text: $pushPayload)
+            JSONTextEditor(text: $pushPayload)
                 .frame(maxWidth: .infinity, minHeight: 150)
-            
-            Text(pushPayloadPreview)
-                .frame(maxWidth: .infinity)
+            Text(errorPushPayload)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .font(.system(size: 12))
+                .foregroundColor(.red)
+//            Text(pushPayloadPreview)
+//                .frame(maxWidth: .infinity)
         }
     }
     var viewSendButton: some View {
@@ -278,6 +290,8 @@ extension APNSView {
             
             if fileType == .p8 {
                 
+                let body: StringAny! = pushPayload.toDictionary()
+                
                 APNSController().apnsP8(isDev: isDevelopment,
                                         p8FilePath: selectedFile,
                                         pushType: pushType.rawValue,
@@ -286,7 +300,7 @@ extension APNSView {
                                         teamID: teamID,
                                         bundleID: bundleID,
                                         deviceToken: deviceToken,
-                                        body: defaultAPNSJSONPayload) {
+                                        body: body) {
                     successAlert.toggle()
                 } failed: { error, message in
                     failureMessage = message
@@ -295,6 +309,9 @@ extension APNSView {
                     sendPushNotification()
                 }
             } else {
+                
+                let body: StringAny! = pushPayload.toDictionary()
+                
                 APNSController().apnsP12(isDev: isDevelopment,
                                          p12FilePath: selectedFile,
                                          password: p12Password,
@@ -304,7 +321,7 @@ extension APNSView {
                                          teamID: teamID,
                                          bundleID: bundleID,
                                          deviceToken: deviceToken,
-                                         body: defaultAPNSJSONPayload) {
+                                         body: body) {
                     successAlert.toggle()
                 } failed: { error, message in
                     failureMessage = message
@@ -389,26 +406,47 @@ extension APNSView {
         if keyID.isEmpty {
             flag = false
             debugPrint("Key ID is empty")
+            errorKeyID = "Enter a valid Key ID"
+        } else {
+            errorKeyID = ""
         }
         
         if teamID.isEmpty {
             flag = false
             debugPrint("Team ID is empty")
+            errorTeamID = "Enter a valid Team ID"
+        } else {
+            errorTeamID = ""
         }
         
         if bundleID.isEmpty {
             flag = false
             debugPrint("Bundle ID is empty")
+            errorBundleID = "Enter a valid bundle ID"
+        } else {
+            errorBundleID = ""
         }
         
         if deviceToken.isEmpty {
             flag = false
             debugPrint("Bundle ID is empty")
+            errorDeviceToken = "Enter a valid device token"
+        } else {
+            errorDeviceToken = ""
+        }
+        
+        if let _: StringAny = pushPayload.toDictionary() {
+            errorPushPayload = ""
+        } else {
+            errorPushPayload = "Enter a valid JSON payload"
         }
         
         if selectedFile == nil {
             flag = false
             debugPrint("Select a file")
+            errorSelectedFile = "Please select a certificate file"
+        } else {
+            errorSelectedFile = ""
         }
         
         return flag

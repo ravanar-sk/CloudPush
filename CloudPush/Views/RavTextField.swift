@@ -19,7 +19,7 @@ struct RavTextField: View {
 //                .font(.system(size: 18))
             if error.count > 0 {
                 Text(error)
-                    .font(.system(size: 8))
+                    .font(.system(size: 12))
                     .foregroundColor(.red)
             }
         }

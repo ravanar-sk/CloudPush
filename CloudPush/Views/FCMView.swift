@@ -14,9 +14,13 @@ struct FCMView: View {
     @State var validateOnly: Bool = false
     
     @State var deviceTokenPlaceholder: String = FCMPushDestinations.device.rawValue
-    @State var deviceToken: String = "clrP03EcRbSZCsQBE5B4rm:APA91bENKhx7ZQ-H1OjSNdxDYJojyIGbYzKW_Sx24431lPIndqtn2vFFHCHBhU4jAxuvB3ovCDudIlbEDjooVRArGmjtxJyySkAu80USKjdQ_lObRA-hzCQ"
+    @State var deviceToken: String = ""
     @State var pushPayload: String = ""
     @State var pushPayloadPreview: String = ""
+    
+    @State var errorSelectedFile: String = ""
+    @State var errorDeviceToken: String = ""
+    @State var errorPayload: String = ""
     
     @State private var successAlert: Bool = false
     @State private var failureAlert: Bool = false
@@ -68,17 +72,23 @@ struct FCMView: View {
     }
     
     private var viewSelectFile: some View {
-        Button {
-            selectAuthFile()
-        } label: {
-            Label {
-                Text(credentialFile?.lastPathComponent ?? "Select Credential File")
-                //                Text("Empty")
-            } icon: {
-                Image(systemName: "paperclip")
-                    .font(.system(size: 15))
+        VStack( alignment: .leading){
+            Button {
+                selectAuthFile()
+            } label: {
+                Label {
+                    Text(credentialFile?.lastPathComponent ?? "Select Credential File")
+                    //                Text("Empty")
+                } icon: {
+                    Image(systemName: "paperclip")
+                        .font(.system(size: 15))
+                }
+                
             }
-            
+            Text(errorSelectedFile)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .font(.system(size: 12))
+                .foregroundColor(.red)
         }
     }
     
@@ -99,17 +109,28 @@ struct FCMView: View {
     }
     
     private var viewDeviceToken: some View {
-        RavTextField(title: deviceTokenPlaceholder, text: $deviceToken, error: "")
+        VStack {
+            RavTextField(title: deviceTokenPlaceholder, text: $deviceToken, error: "")
+            Text(errorDeviceToken)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .font(.system(size: 12))
+                .foregroundColor(.red)
+        }
     }
     
     var viewPayload: some View {
         // Row 8
-        HStack {
-            TextEditor(text: $pushPayload)
+        VStack {
+//            TextEditor(text: $pushPayload)
+            JSONTextEditor(text: $pushPayload)
                 .frame(maxWidth: .infinity, minHeight: 150)
             
-            Text(pushPayloadPreview)
-                .frame(maxWidth: .infinity)
+//            Text(pushPayloadPreview)
+//                .frame(maxWidth: .infinity)
+            Text(errorPayload)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .font(.system(size: 12))
+                .foregroundColor(.red)
         }
     }
     
@@ -155,35 +176,30 @@ extension FCMView {
     
     private func validForm() -> Bool {
         var flag = true
-        
-        if pushPayload.isEmpty {
-            flag = false
-            debugPrint("Please add a valid JSON data")
-            failureMessage = "Please add a valid JSON data"
-            failureAlert.toggle()
-        }
+                
         
         if deviceToken.isEmpty {
             flag = false
             debugPrint("Please add a valid device token")
-            failureMessage = "Please add a valid device token"
-            failureAlert.toggle()
+            errorDeviceToken = "Please add a valid device token"
+        } else {
+            errorDeviceToken = ""
         }
         
         if credentialFile == nil {
             flag = false
             debugPrint("Please select a google credential file")
-            failureMessage = "Please select a google credential file"
-            failureAlert.toggle()
+            errorSelectedFile = "Please select a google credential file"
+        } else {
+            errorSelectedFile = ""
         }
         
-        if let payload: [String:Any] = pushPayload.toDictionary() {
-            
+        if let _: [String:Any] = pushPayload.toDictionary() {
+            errorPayload = ""
         } else {
             flag = false
             debugPrint("Please add valid JSON payload")
-            failureMessage = "Please add valid JSON payload"
-            failureAlert.toggle()
+            errorPayload = "Please add valid JSON payload"
         }
         
         return flag
