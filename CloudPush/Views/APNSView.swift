@@ -54,6 +54,8 @@ struct APNSView: View {
     @State private var failureAlert: Bool = false
     @State private var failureMessage: String = ""
     
+    @State private var apiLoading: Bool = false
+    
     @Environment(\.modelContext) var context
     
     
@@ -265,7 +267,17 @@ struct APNSView: View {
                 sendPushNotification()
             } label: {
                 Label {
-                    Text("Send")
+                    HStack(spacing: 0) {
+                        Text("Send")
+                        
+                        if apiLoading {
+                            ProgressView()
+                                .scaleEffect(0.5)
+                                .frame(width: 25, height: 20)
+                        }
+                            
+                    }
+
                 } icon: {
                     Image(systemName: "paperplane.fill")
                 }
@@ -288,6 +300,8 @@ extension APNSView {
         
         if (validate()) {
             
+            apiLoading = true
+            
             if fileType == .p8 {
                 
                 let body: StringAny! = pushPayload.toDictionary()
@@ -301,8 +315,10 @@ extension APNSView {
                                         bundleID: bundleID,
                                         deviceToken: deviceToken,
                                         body: body) {
+                    apiLoading = false
                     successAlert.toggle()
                 } failed: { error, message in
+                    apiLoading = false
                     failureMessage = message
                     failureAlert.toggle()
                 } retry: {
@@ -322,8 +338,10 @@ extension APNSView {
                                          bundleID: bundleID,
                                          deviceToken: deviceToken,
                                          body: body) {
+                    apiLoading = false
                     successAlert.toggle()
                 } failed: { error, message in
+                    apiLoading = false
                     failureMessage = message
                     failureAlert.toggle()
                 }

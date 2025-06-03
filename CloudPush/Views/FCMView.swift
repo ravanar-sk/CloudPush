@@ -26,6 +26,8 @@ struct FCMView: View {
     @State private var failureAlert: Bool = false
     @State private var failureMessage: String = ""
     
+    @State private var apiLoading: Bool = false
+    
     
     @State private var pushDestination: FCMPushDestinations = .device
     
@@ -142,7 +144,17 @@ struct FCMView: View {
                 sendPushNotification()
             } label: {
                 Label {
-                    Text("Send")
+//                    Text("Send")
+                    HStack(spacing: 0) {
+                        Text("Send")
+                        
+                        if apiLoading {
+                            ProgressView()
+                                .scaleEffect(0.5)
+                                .frame(width: 25, height: 20)
+                        }
+                            
+                    }
                 } icon: {
                     Image(systemName: "paperplane.fill")
                 }
@@ -209,6 +221,8 @@ extension FCMView {
         
         if validForm() {
             
+            apiLoading = true
+            
             var payload: [String:Any] = pushPayload.toDictionary()!
 //            var payload: [String:Any] = defaultFCMJSONPayload
             
@@ -231,9 +245,11 @@ extension FCMView {
             
             FCMController(credentialsURL: credentialFile!).send(body: body) {
                 debugPrint("Success")
+                apiLoading = false
                 successAlert.toggle()
             } failed: { message in
                 debugPrint("Failed: \(message)")
+                apiLoading = false
                 failureMessage = message
                 failureAlert.toggle()
             }
